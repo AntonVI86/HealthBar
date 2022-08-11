@@ -16,24 +16,30 @@ public class HealthDisplaying : MonoBehaviour
         _healthBar.maxValue = _playerHealth.MaxHealth;
     }
 
-    public void OnChangedHealthValue() 
+    private void OnEnable()
     {
-        StartCoroutine(ChangeHealthValue());
-        StartCoroutine(ChangeColor());
+        _playerHealth.HealthChanged += OnHealthChanged;
     }
 
-    private IEnumerator ChangeColor() 
+    private void OnDisable()
     {
-        float normValue = _playerHealth.CurrentHealth / _playerHealth.MaxHealth;
-        _fill.color = Color.Lerp(_finishColor, _startColor, normValue);
-        yield return null;
+        _playerHealth.HealthChanged -= OnHealthChanged;
+    }
+
+    public void OnHealthChanged(float health) 
+    {
+        StartCoroutine(ChangeHealthValue());
     }
 
     private IEnumerator ChangeHealthValue() 
     {
         while (_healthBar.value != _playerHealth.CurrentHealth) 
-        {            
-            _healthBar.value = Mathf.MoveTowards(_healthBar.value, _playerHealth.CurrentHealth, _fillSpeed * Time.deltaTime);           
+        {
+            float normalizeValue = _playerHealth.CurrentHealth / _playerHealth.MaxHealth;
+
+            _fill.color = Color.Lerp(_finishColor, _startColor, normalizeValue);
+            _healthBar.value = Mathf.MoveTowards(_healthBar.value, _playerHealth.CurrentHealth, _fillSpeed * Time.deltaTime); 
+            
             yield return null;
         }
     }
