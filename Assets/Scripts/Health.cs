@@ -21,17 +21,17 @@ public class Health : MonoBehaviour
     {
         _currentHealth -= damage;
         HealthChanged?.Invoke(_currentHealth);
-        CheckHealthValue();
+        LimitHealthValue();
     }
 
     public void Heal(float healPower)
     {
         _currentHealth += healPower;
         HealthChanged?.Invoke(_currentHealth);
-        CheckHealthValue();
+        LimitHealthValue();
     }
 
-    private void CheckHealthValue() 
+    private void LimitHealthValue() 
     {
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
     }

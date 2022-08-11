@@ -28,6 +28,7 @@ public class HealthDisplaying : MonoBehaviour
 
     public void OnHealthChanged(float health) 
     {
+        StopAllCoroutines();
         StartCoroutine(ChangeHealthValue());
     }
 
