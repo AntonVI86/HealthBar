@@ -11,6 +11,8 @@ public class HealthDisplaying : MonoBehaviour
     [SerializeField] private Color _startColor;
     [SerializeField] private Color _finishColor;
 
+    private Coroutine _coroutine;
+
     private void Awake()
     {
         _healthBar.maxValue = _playerHealth.MaxHealth;
@@ -28,8 +30,12 @@ public class HealthDisplaying : MonoBehaviour
 
     public void OnHealthChanged(float health) 
     {
-        StopAllCoroutines();
-        StartCoroutine(ChangeHealthValue());
+        if (_coroutine != null) 
+        {
+            StopCoroutine(_coroutine);
+        }
+
+        _coroutine = StartCoroutine(ChangeHealthValue());
     }
 
     private IEnumerator ChangeHealthValue() 
@@ -39,8 +45,8 @@ public class HealthDisplaying : MonoBehaviour
             float normalizeValue = _playerHealth.CurrentHealth / _playerHealth.MaxHealth;
 
             _fill.color = Color.Lerp(_finishColor, _startColor, normalizeValue);
-            _healthBar.value = Mathf.MoveTowards(_healthBar.value, _playerHealth.CurrentHealth, _fillSpeed * Time.deltaTime); 
-            
+            _healthBar.value = Mathf.MoveTowards(_healthBar.value, _playerHealth.CurrentHealth, _fillSpeed * Time.deltaTime);
+
             yield return null;
         }
     }
