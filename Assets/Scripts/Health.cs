@@ -5,9 +5,9 @@ public class Health : MonoBehaviour
 {
     [SerializeField] private float _maxHealth;
 
-    private float _currentHealth;
-
     public event UnityAction<float> HealthChanged;
+
+    private float _currentHealth;
 
     public float MaxHealth => _maxHealth;
     public float CurrentHealth => _currentHealth;
